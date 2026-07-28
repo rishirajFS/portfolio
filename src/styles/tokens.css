@@ -1,0 +1,381 @@
+/* ============================================================================
+   DESIGN TOKENS: the single file you edit to re-theme the entire site.
+   ============================================================================
+
+   Theme: PIXEL GUI. A 2D voxel-game interface, per the design handoff in
+   docs/PIXEL-HANDOFF.md. Every value below is from that spec and is final.
+
+   Three things are load-bearing for the aesthetic. Breaking any of them makes
+   the whole thing look like a website wearing a costume:
+
+     1. ZERO RADIUS. Every corner is square. There is no --radius token that is
+        not 0, and none should be added.
+     2. BEVELS, NOT SHADOWS. Depth comes from a 3px or 4px hard border: light on
+        top/left, dark on right/bottom for a RAISED panel, and inverted for an
+        INSET slot. Raised panels vs. inset slots is the core visual grammar.
+     3. DITHER, NOT GRADIENTS. Tonal transitions are 8px checkerboards via
+        repeating-conic-gradient. There are no smooth gradients except the dirt
+        vignette.
+
+   Everything sits on a 4px grid, and every size is an integer pixel value.
+   Fractional layout visibly softens the bevels.
+   ========================================================================= */
+
+:root {
+  /* ==========================================================================
+     PANEL / CHROME
+     The GUI itself. Raised surfaces are panel-*, recessed ones are slot-*.
+     ====================================================================== */
+
+  --panel-face: #c6c6c6;
+  --panel-bevel-light: #ffffff;
+  --panel-bevel-dark: #565656;
+  --panel-ring: #1a1a1a;
+
+  --slot-face: #8b8b8b;
+  --slot-face-hover: #9b9b9b;
+  /* Inverted on purpose: dark on top/left reads as a hole, not a button. */
+  --slot-bevel-dark: #373737;
+  --slot-bevel-light: #ffffff;
+
+  --subpanel-face: #a8a8a8;
+  --subpanel-bevel-light: #d0d0d0;
+  --subpanel-bevel-dark: #6a6a6a;
+
+  --tab-inactive: #8b8b8b;
+  --tab-inactive-bevel-light: #b8b8b8;
+  --tab-inactive-bevel-dark: #4a4a4a;
+
+  /* Text on GUI chrome. */
+  --chrome-text: #2b2b2b;
+  --chrome-text-soft: #3a3a3a;
+  --chrome-text-dim: #5a5a5a;
+  --chrome-text-emboss: #e0e0e0;
+  --chrome-text-emboss-strong: #a0a0a0;
+
+  /* ==========================================================================
+     WORLD
+     The scene behind the GUI. Bands are painted top to bottom.
+     ====================================================================== */
+
+  --sky-1: #6d9dff;
+  --sky-2: #8cb8ff;
+  --sky-3: #a9cbff;
+  --grass-light: #8ac249;
+  --grass-dark: #6f9f37;
+  --dirt: #8d6144;
+  --dirt-line: rgba(0, 0, 0, 0.14);
+  --scrim: rgba(10, 10, 14, 0.55);
+
+  /* Band geometry, in design pixels at the 1040px reference width. */
+  --band-sky-1: 112px;
+  --band-dither-1: 32px;
+  --band-sky-2: 96px;
+  --band-dither-2: 32px;
+  --band-sky-3: 96px;
+  --band-grass-top: 16px;
+  --band-grass-dither: 16px;
+
+  /* One knob for the dither cell. 8px is the spec; 4px reads finer, 16 chunkier. */
+  --dither-size: 8px;
+  /* Block grid pitch on the dirt. */
+  --block-size: 32px;
+
+  /* ==========================================================================
+     ACCENT / SEMANTIC
+     ====================================================================== */
+
+  --primary: #4a8f2c;
+  --primary-bevel-light: #7cc84c;
+  --primary-bevel-dark: #2c5d18;
+  --primary-text: #ffffff;
+
+  --secondary: #7a7a7a;
+  --secondary-bevel-light: #a8a8a8;
+  --secondary-bevel-dark: #4a4a4a;
+  --secondary-text: #e8e8e8;
+
+  --gold: #ffcc33;
+  --xp-fill: #7cff5c;
+  --xp-track: #1a1a1a;
+  --health-full: #d8342a;
+  --health-empty: #4a2320;
+  --armor-full: #c9c9c9;
+  --armor-empty: #3c3c3c;
+
+  /* Tooltip. The one dark surface in the design, and the only violet. */
+  --tooltip-bg: rgba(16, 0, 24, 0.92);
+  --tooltip-bg-solid: #1c1024;
+  --tooltip-border: #2b0a4a;
+  --tooltip-ring: #100018;
+  --tooltip-title: #ffffff;
+  --tooltip-meta: #a8a8ff;
+  --tooltip-muted: #8a8a9a;
+  --tooltip-dim: #5a5a6a;
+
+  /* Item rarity. Mirrors project tier: featured/secondary/everything else. */
+  --rarity-legendary: #ffcc33;
+  --rarity-rare: #a8a8ff;
+  --rarity-common: #d8d8d8;
+
+  /* Body plate: the dark translucent slab hero copy sits on. */
+  --plate-bg: rgba(20, 20, 20, 0.62);
+  --plate-border: #1a1a1a;
+  --plate-text: #e8e8e8;
+
+  /* Headline treatment. */
+  --headline-text: #ffffff;
+  --headline-shadow: #3a3a3a;
+  --headline-accent: #ffcc33;
+
+  /* Contribution-graph scale, dark to light. */
+  --contrib-0: #1d3a10;
+  --contrib-1: #2f6b1c;
+  --contrib-2: #4a8f2c;
+  --contrib-3: #7cc84c;
+
+  /* Language colours, from GitHub linguist. Referenced by lib/languages.ts. */
+  --lang-python: #3572a5;
+  --lang-java: #b07219;
+  --lang-html: #e34c26;
+  --lang-javascript: #f1e05a;
+  --lang-typescript: #3178c6;
+  --lang-c: #555555;
+  --lang-cpp: #f34b7d;
+  --lang-cuda: #3a4e3a;
+  --lang-cython: #fedf5b;
+  --lang-cmake: #da3434;
+  --lang-dockerfile: #384d54;
+  --lang-shell: #89e051;
+  --lang-ruby: #701516;
+  --lang-hcl: #844fba;
+  --lang-mustache: #724b3b;
+  --lang-plpgsql: #336790;
+  --lang-notebook: #da5b0b;
+  --lang-unknown: #6a6a6a;
+
+  /* ==========================================================================
+     SHAPE
+     ====================================================================== */
+
+  /* Square. All of them. Kept as tokens only so Tailwind's rounded-* utilities
+     cannot silently reintroduce a radius. */
+  --radius-none: 0px;
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-full: 0px;
+
+  --bevel-panel: 4px; /* panels, buttons, tabs */
+  --bevel-slot: 3px; /* slots, subpanels */
+  --ring-width: 4px; /* the black outer ring on panels */
+
+  /* ==========================================================================
+     TYPOGRAPHY
+     Silkscreen is a bitmap face. It is only legible at integer sizes, and the
+     6px repo-cell label is only legible at all because of that. Never scale it
+     fractionally and never substitute another family at the small sizes.
+     ====================================================================== */
+
+  --font-display: var(--font-pixel-src), "Courier New", monospace;
+  --font-sans: var(--font-pixel-src), "Courier New", monospace;
+  --font-mono: var(--font-pixel-src), "Courier New", monospace;
+  /* Long-form prose on project pages, where 12px Silkscreen would be punishing
+     to read for several paragraphs. Still pixel-adjacent, still monospaced. */
+  --font-read: var(--font-read-src), ui-monospace, "SF Mono", monospace;
+
+  --text-cell: 6px; /* repo cell name */
+  --text-2xs: 9px; /* counts, footnotes */
+  --text-xs: 10px; /* stat rows, tooltip meta, section headings */
+  --text-sm: 11px; /* nav, buttons, tabs */
+  --text-base: 12px; /* body plate, panel headings */
+  --text-md: 14px; /* wordmark, level number */
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 32px;
+  --text-4xl: 40px;
+  --text-5xl: 56px; /* hero headline */
+  --text-6xl: 56px;
+  --text-7xl: 56px;
+
+  --leading-tight: 1.05;
+  --leading-snug: 1.35;
+  --leading-normal: 1.7;
+  --leading-relaxed: 1.9;
+
+  /* Silkscreen is already wide. Extra tracking makes it illegible. */
+  --tracking-tighter: 0;
+  --tracking-tight: 0;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+  --tracking-widest: 0.08em;
+
+  --weight-normal: 400;
+  --weight-medium: 400;
+  --weight-semibold: 700;
+  --weight-bold: 700;
+
+  --display-optical-inset: 0;
+
+  /* ==========================================================================
+     LAYOUT
+     ====================================================================== */
+
+  --width-prose: 62ch;
+  --width-content: 1040px; /* 2a design width */
+  --width-wide: 1240px; /* 4a design width */
+  --gutter: 32px;
+
+  --section-py: 48px;
+  --section-py-lg: 72px;
+  --header-h: 56px; /* the top bar panel */
+
+  /* ==========================================================================
+     MOTION
+     Snappy, not floaty. Steps rather than easing wherever a 2-frame game feel
+     is possible: smooth interpolation is the one thing that reads as "web".
+     ====================================================================== */
+
+  --dur-scale: 1;
+  --dur-instant: calc(60ms * var(--dur-scale));
+  --dur-fast: calc(120ms * var(--dur-scale));
+  --dur-base: calc(160ms * var(--dur-scale));
+  --dur-slow: calc(240ms * var(--dur-scale));
+  --dur-slower: calc(400ms * var(--dur-scale));
+
+  --ease-out: steps(4, end);
+  --ease-in-out: steps(4, end);
+  --ease-spring: steps(3, end);
+  --ease-linear: linear;
+
+  --reveal-y: 8px;
+  --reveal-stagger: 40ms;
+
+  --drift-duration: 40s; /* cloud drift, 0 to 240px */
+  --bob-duration: 1.8s; /* sprite bob, 2 frames */
+
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 20;
+  --z-header: 30;
+  --z-overlay: 40;
+  --z-modal: 50;
+  --z-tooltip: 60;
+
+  /* ==========================================================================
+     COMPATIBILITY LAYER
+     The section components predate this theme and consume semantic names
+     (bg, fg-muted, border-subtle, surface). Rather than rewrite every one,
+     those names are mapped onto the GUI palette here. New pixel components
+     should use the tokens above directly.
+     ====================================================================== */
+
+  --color-bg: var(--dirt);
+  --color-bg-subtle: #7d5238;
+  --color-surface: var(--panel-face);
+  --color-surface-raised: #d4d4d4;
+  --color-surface-sunken: var(--slot-face);
+  --color-surface-inverse: var(--tooltip-bg-solid);
+
+  --color-fg: var(--chrome-text);
+  --color-fg-muted: var(--chrome-text-soft);
+  --color-fg-subtle: var(--chrome-text-dim);
+  --color-fg-faint: #6a6a6a;
+  --color-fg-inverse: #ffffff;
+
+  --color-border: var(--panel-bevel-dark);
+  --color-border-subtle: #9a9a9a;
+  --color-border-strong: var(--panel-ring);
+
+  --color-accent: var(--primary);
+  --color-accent-hover: var(--primary-bevel-light);
+  --color-accent-fg: var(--primary-text);
+  --color-accent-subtle: var(--primary-bevel-light);
+  --color-accent-muted: rgba(74, 143, 44, 0.18);
+  --color-accent-line: var(--primary-bevel-dark);
+  --color-accent-text: #2c5d18;
+  --color-accent-2: var(--tooltip-border);
+  --color-accent-2-muted: rgba(43, 10, 74, 0.14);
+
+  --color-ring: var(--gold);
+  --color-ok: var(--primary-bevel-light);
+  --color-warn: var(--gold);
+  --color-err: var(--health-full);
+
+  --grain-opacity: 0;
+  --glow-opacity: 0;
+
+  /* Shadows are bevels here. Kept non-empty only where a real drop shadow
+     helps a floating layer (tooltips, the inventory panel) read as above. */
+  --shadow-xs: none;
+  --shadow-sm: none;
+  --shadow-md: 0 4px 0 rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 0 rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 0 0 4px var(--gold);
+
+  color-scheme: light;
+}
+
+/* ============================================================================
+   NIGHT MODE
+   Not a colour inversion. It is dusk in the world: the sky darkens, the grass
+   and dirt cool off, and the GUI chrome stays exactly as bright as it was,
+   because a game's HUD does not dim when the sun sets. That contrast is the
+   whole point, so resist "fixing" the panel colours here.
+   ========================================================================= */
+
+.dark {
+  --sky-1: #16213e;
+  --sky-2: #24314f;
+  --sky-3: #34425f;
+  --grass-light: #4a6b2c;
+  --grass-dark: #35501f;
+  --dirt: #4a3628;
+  --scrim: rgba(4, 4, 8, 0.68);
+
+  --color-bg: var(--dirt);
+  --color-bg-subtle: #3d2c20;
+
+  --plate-bg: rgba(8, 8, 12, 0.74);
+
+  /* Slightly hotter, so the HUD still pops against a dark world. */
+  --xp-fill: #8dff6c;
+  --gold: #ffd54a;
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not(.dark) {
+    color-scheme: dark;
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION
+   The handoff calls for drift and bob to stop. Everything else in this theme is
+   a step transition of at most a few frames, so it is already unobtrusive.
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-scale: 0.01;
+    --reveal-y: 0px;
+    --reveal-stagger: 0ms;
+    --drift-duration: 0s;
+    --bob-duration: 0s;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

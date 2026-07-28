@@ -1,26 +1,683 @@
 @import "tailwindcss";
+@import "../styles/tokens.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Drive `dark:` utilities off the .dark class that next-themes sets, rather
+   than off prefers-color-scheme, so the theme toggle actually works. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* The width at which the positioned stage layouts kick in: the 1040px home
+   canvas plus its 32px gutters. In a plain @theme block, not @theme inline,
+   because breakpoints have to be resolvable at build time for Tailwind to
+   generate and correctly order the `stage:` and `max-stage:` variants.
+
+   Use `stage:` for anything keyed to the design canvases. When a class needs to
+   apply ONLY below it, prefer `max-stage:` over stacking `stage:hidden` on top
+   of a smaller breakpoint: two competing variants leave the outcome up to
+   source order, which is how the hero briefly rendered two HUDs. */
+@theme {
+  --breakpoint-stage: 1100px;
 }
+
+/* ============================================================================
+   TAILWIND BRIDGE
+   Maps the tokens in styles/tokens.css onto Tailwind's theme.
+
+   `inline` matters: utilities emit `var(--panel-face)` rather than baking in a
+   value, so the .dark overrides apply at runtime with no rebuild.
+   ========================================================================= */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* --- GUI chrome ------------------------------------------------------- */
+  --color-panel: var(--panel-face);
+  --color-panel-light: var(--panel-bevel-light);
+  --color-panel-dark: var(--panel-bevel-dark);
+  --color-ring-black: var(--panel-ring);
+  --color-slot: var(--slot-face);
+  --color-slot-hover: var(--slot-face-hover);
+  --color-subpanel: var(--subpanel-face);
+  --color-tab-inactive: var(--tab-inactive);
+
+  --color-chrome: var(--chrome-text);
+  --color-chrome-soft: var(--chrome-text-soft);
+  --color-chrome-dim: var(--chrome-text-dim);
+
+  /* --- world ------------------------------------------------------------ */
+  --color-sky-1: var(--sky-1);
+  --color-sky-2: var(--sky-2);
+  --color-sky-3: var(--sky-3);
+  --color-grass: var(--grass-light);
+  --color-grass-dark: var(--grass-dark);
+  --color-dirt: var(--dirt);
+
+  /* --- semantic --------------------------------------------------------- */
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-gold: var(--gold);
+  --color-xp: var(--xp-fill);
+  --color-health: var(--health-full);
+  --color-health-empty: var(--health-empty);
+  --color-armor: var(--armor-full);
+  --color-armor-empty: var(--armor-empty);
+
+  --color-tooltip: var(--tooltip-bg-solid);
+  --color-tooltip-border: var(--tooltip-border);
+  --color-tooltip-title: var(--tooltip-title);
+  --color-tooltip-meta: var(--tooltip-meta);
+  --color-tooltip-muted: var(--tooltip-muted);
+  --color-tooltip-dim: var(--tooltip-dim);
+
+  --color-legendary: var(--rarity-legendary);
+  --color-rare: var(--rarity-rare);
+  --color-common: var(--rarity-common);
+
+  --color-plate: var(--plate-bg);
+  --color-plate-text: var(--plate-text);
+
+  /* --- compatibility aliases (older section components) ----------------- */
+  --color-bg: var(--color-bg);
+  --color-bg-subtle: var(--color-bg-subtle);
+  --color-surface: var(--color-surface);
+  --color-surface-raised: var(--color-surface-raised);
+  --color-surface-sunken: var(--color-surface-sunken);
+  --color-surface-inverse: var(--color-surface-inverse);
+  --color-fg: var(--color-fg);
+  --color-fg-muted: var(--color-fg-muted);
+  --color-fg-subtle: var(--color-fg-subtle);
+  --color-fg-faint: var(--color-fg-faint);
+  --color-fg-inverse: var(--color-fg-inverse);
+  --color-border: var(--color-border);
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border-strong: var(--color-border-strong);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-fg: var(--color-accent-fg);
+  --color-accent-subtle: var(--color-accent-subtle);
+  --color-accent-muted: var(--color-accent-muted);
+  --color-accent-line: var(--color-accent-line);
+  --color-accent-text: var(--color-accent-text);
+  --color-accent-2: var(--color-accent-2);
+  --color-accent-2-muted: var(--color-accent-2-muted);
+  --color-ok: var(--color-ok);
+  --color-warn: var(--color-warn);
+  --color-err: var(--color-err);
+
+  /* --- type ------------------------------------------------------------- */
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-read: var(--font-read);
+
+  --text-cell: var(--text-cell);
+  --text-2xs: var(--text-2xs);
+  --text-xs: var(--text-xs);
+  --text-sm: var(--text-sm);
+  --text-base: var(--text-base);
+  --text-md: var(--text-md);
+  --text-lg: var(--text-lg);
+  --text-xl: var(--text-xl);
+  --text-2xl: var(--text-2xl);
+  --text-3xl: var(--text-3xl);
+  --text-4xl: var(--text-4xl);
+  --text-5xl: var(--text-5xl);
+  --text-6xl: var(--text-6xl);
+  --text-7xl: var(--text-7xl);
+
+  --leading-tight: var(--leading-tight);
+  --leading-snug: var(--leading-snug);
+  --leading-normal: var(--leading-normal);
+  --leading-relaxed: var(--leading-relaxed);
+
+  --tracking-tighter: var(--tracking-tighter);
+  --tracking-tight: var(--tracking-tight);
+  --tracking-normal: var(--tracking-normal);
+  --tracking-wide: var(--tracking-wide);
+  --tracking-widest: var(--tracking-widest);
+
+  /* --- shape: square, always ------------------------------------------- */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-glow: var(--shadow-glow);
+
+  /* --- layout ----------------------------------------------------------- */
+  --container-prose: var(--width-prose);
+  --container-content: var(--width-content);
+  --container-wide: var(--width-wide);
+  --spacing-gutter: var(--gutter);
+  --spacing-section: var(--section-py);
+  --spacing-section-lg: var(--section-py-lg);
+  --spacing-header: var(--header-h);
+
+  --ease-out: var(--ease-out);
+  --ease-in-out: var(--ease-in-out);
+  --ease-spring: var(--ease-spring);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@utility duration-fast {
+  transition-duration: var(--dur-fast);
+}
+@utility duration-base {
+  transition-duration: var(--dur-base);
+}
+@utility duration-slow {
+  transition-duration: var(--dur-slow);
+}
+@utility duration-slower {
+  transition-duration: var(--dur-slower);
+}
+
+/* ============================================================================
+   BASE
+   ========================================================================= */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 32px);
+    /* Keep every bevel crisp. Fractional layout softens them visibly. */
+    image-rendering: pixelated;
+  }
+
+  body {
+    background-color: var(--dirt);
+    color: var(--chrome-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    /* Silkscreen is a bitmap face. Antialiasing it is what makes pixel type
+       look blurry, so turn it off here rather than per-component. */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: unset;
+    font-smooth: never;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-normal);
+    line-height: var(--leading-snug);
+  }
+
+  h1 {
+    line-height: var(--leading-tight);
+  }
+
+  th,
+  td,
+  time,
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background-color: var(--gold);
+    color: var(--panel-ring);
+  }
+
+  /* Focus is a hard pixel ring, matching the hotbar's selection outline. */
+  :focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 1px;
+    border-radius: 0;
+  }
+
+  /* Chunky square scrollbar, in GUI grays. */
+  * {
+    scrollbar-color: var(--slot-face) var(--panel-ring);
+    scrollbar-width: thin;
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--panel-ring);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--slot-face);
+    border-top: 2px solid var(--slot-bevel-light);
+    border-left: 2px solid var(--slot-bevel-light);
+    border-right: 2px solid var(--slot-bevel-dark);
+    border-bottom: 2px solid var(--slot-bevel-dark);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--slot-face-hover);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================================
+   PIXEL PRIMITIVES
+   The bevel recipes. Raised (panel/subpanel/button) puts light on top-left;
+   inset (slot) inverts it. That single distinction carries the whole GUI, so
+   these five classes are the most reused code in the project.
+   ========================================================================= */
+
+@layer utilities {
+  /* --- raised ----------------------------------------------------------- */
+
+  .bevel-panel {
+    background-color: var(--panel-face);
+    border-style: solid;
+    border-width: var(--bevel-panel);
+    border-color: var(--panel-bevel-light) var(--panel-bevel-dark)
+      var(--panel-bevel-dark) var(--panel-bevel-light);
+  }
+
+  /* The 4px black outer ring. Separate class so a panel can opt out. */
+  .bevel-ring {
+    box-shadow: 0 0 0 var(--ring-width) var(--panel-ring);
+  }
+
+  .bevel-subpanel {
+    background-color: var(--subpanel-face);
+    border-style: solid;
+    border-width: var(--bevel-slot);
+    border-color: var(--subpanel-bevel-light) var(--subpanel-bevel-dark)
+      var(--subpanel-bevel-dark) var(--subpanel-bevel-light);
+  }
+
+  /* --- inset ------------------------------------------------------------ */
+
+  .bevel-slot {
+    background-color: var(--slot-face);
+    border-style: solid;
+    border-width: var(--bevel-slot);
+    border-color: var(--slot-bevel-dark) var(--slot-bevel-light)
+      var(--slot-bevel-light) var(--slot-bevel-dark);
+  }
+
+  .bevel-slot-hover:hover {
+    background-color: var(--slot-face-hover);
+  }
+
+  /* Selection outline, drawn inside the slot so it does not shift layout. */
+  .slot-selected {
+    outline: 3px solid #fff;
+    outline-offset: -3px;
+  }
+
+  /* --- buttons ---------------------------------------------------------- */
+
+  .bevel-btn {
+    border-style: solid;
+    border-width: var(--bevel-panel);
+    box-shadow: 0 0 0 var(--ring-width) var(--panel-ring);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    cursor: pointer;
+    /* Steps, not ease: a 2-frame press reads as a game button. */
+    transition: filter var(--dur-fast) var(--ease-out);
+  }
+
+  .bevel-btn:hover {
+    filter: brightness(1.12);
+  }
+
+  /* Press flips the bevel, so the button physically goes in. */
+  .bevel-btn:active {
+    border-color: var(--btn-bevel-dark) var(--btn-bevel-light)
+      var(--btn-bevel-light) var(--btn-bevel-dark);
+  }
+
+  .btn-primary {
+    --btn-bevel-light: var(--primary-bevel-light);
+    --btn-bevel-dark: var(--primary-bevel-dark);
+    background-color: var(--primary);
+    color: var(--primary-text);
+    border-color: var(--primary-bevel-light) var(--primary-bevel-dark)
+      var(--primary-bevel-dark) var(--primary-bevel-light);
+  }
+
+  .btn-secondary {
+    --btn-bevel-light: var(--secondary-bevel-light);
+    --btn-bevel-dark: var(--secondary-bevel-dark);
+    background-color: var(--secondary);
+    color: var(--secondary-text);
+    border-color: var(--secondary-bevel-light) var(--secondary-bevel-dark)
+      var(--secondary-bevel-dark) var(--secondary-bevel-light);
+  }
+
+  /* Small nav button: 3px bevel, no ring. */
+  .btn-nav {
+    --btn-bevel-light: #d8d8d8;
+    --btn-bevel-dark: #6a6a6a;
+    background-color: #a8a8a8;
+    color: var(--chrome-text-soft);
+    border-style: solid;
+    border-width: var(--bevel-slot);
+    border-color: #d8d8d8 #6a6a6a #6a6a6a #d8d8d8;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: filter var(--dur-fast) var(--ease-out);
+  }
+  .btn-nav:hover {
+    filter: brightness(1.1);
+  }
+  .btn-nav:active {
+    border-color: #6a6a6a #d8d8d8 #d8d8d8 #6a6a6a;
+  }
+
+  /* --- tooltip ---------------------------------------------------------- */
+
+  .tooltip-panel {
+    background-color: var(--tooltip-bg);
+    border: var(--bevel-panel) solid var(--tooltip-border);
+    box-shadow: 0 0 0 var(--ring-width) var(--tooltip-ring);
+    color: var(--tooltip-title);
+  }
+
+  /* --- text treatments -------------------------------------------------- */
+
+  /* Embossed GUI label: the 1px light shadow that makes text look stamped
+     into the panel. Minecraft does this on every GUI string. */
+  .emboss {
+    text-shadow: 1px 1px 0 var(--chrome-text-emboss);
+  }
+  .emboss-strong {
+    text-shadow: 2px 2px 0 var(--chrome-text-emboss-strong);
+  }
+  /* Hard drop shadow for text over the world, where there is no panel behind. */
+  .text-drop {
+    text-shadow: 2px 2px 0 var(--headline-shadow);
+  }
+  .text-drop-lg {
+    text-shadow: 4px 4px 0 var(--headline-shadow);
+  }
+
+  .eyebrow {
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-normal);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--chrome-text-soft);
+  }
+
+  .optical-left {
+    margin-inline-start: 0;
+  }
+
+  /* --- world texture ---------------------------------------------------- */
+
+  /* The dither band. This one class replaces every gradient in the design:
+     an 8px checkerboard of two adjacent tones, which is how the sky steps down
+     without a smooth ramp. */
+  .dither {
+    background-image: repeating-conic-gradient(
+      var(--dither-light) 0% 25%,
+      var(--dither-dark) 0% 50%
+    );
+    background-size: var(--dither-size) var(--dither-size);
+  }
+
+  /* 32px block grid on the dirt. */
+  .block-grid {
+    background-image:
+      linear-gradient(to right, var(--dirt-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--dirt-line) 1px, transparent 1px);
+    background-size: var(--block-size) var(--block-size);
+  }
+
+  .pixelated {
+    image-rendering: pixelated;
+  }
+
+  /* --- long-form prose on project pages -------------------------------- */
+
+  /* Silkscreen at 12px is unreadable for several paragraphs, so body copy on
+     detail pages switches to the reading face. Headings stay pixel. */
+  .prose-site {
+    font-family: var(--font-read);
+    color: #e8e8e8;
+    font-size: 13px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .prose-site > * + * {
+    margin-block-start: 1.1em;
+  }
+  .prose-site h2,
+  .prose-site h3 {
+    font-family: var(--font-display);
+    color: #fff;
+    margin-block-start: 2em;
+    margin-block-end: 0.8em;
+  }
+  .prose-site h2 {
+    font-size: var(--text-base);
+  }
+  .prose-site h3 {
+    font-size: var(--text-sm);
+  }
+  .prose-site strong {
+    color: #fff;
+  }
+  .prose-site a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+  .prose-site code {
+    font-family: var(--font-read);
+    font-size: 0.92em;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--tooltip-border);
+    padding: 0.1em 0.35em;
+  }
+  .prose-site ul,
+  .prose-site ol {
+    padding-inline-start: 1.25em;
+  }
+  .prose-site ul {
+    list-style: none;
+  }
+  .prose-site ul > li {
+    position: relative;
+  }
+  /* Square bullet, because nothing here is round. */
+  .prose-site ul > li::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: -1em;
+    inset-block-start: 0.6em;
+    width: 5px;
+    height: 5px;
+    background-color: var(--gold);
+  }
+  .prose-site ol {
+    list-style: decimal;
+  }
+  .prose-site li + li {
+    margin-block-start: 0.5em;
+  }
+
+  /* --- layout helpers -------------------------------------------------- */
+
+  .container-page {
+    width: 100%;
+    max-width: var(--width-content);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .container-wide {
+    width: 100%;
+    max-width: var(--width-wide);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .container-prose {
+    width: 100%;
+    max-width: var(--width-prose);
+  }
+
+  /* A 4px hairline rule in panel grays, standing in for the old fade rule. */
+  .rule-fade {
+    height: 2px;
+    background: linear-gradient(
+      to bottom,
+      var(--panel-bevel-dark) 0 1px,
+      var(--panel-bevel-light) 1px 2px
+    );
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-size: var(--block-size) var(--block-size);
+  }
+  .bg-dots {
+    background-image: radial-gradient(rgba(0, 0, 0, 0.14) 1px, transparent 1px);
+    background-size: 8px 8px;
+  }
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+  }
+  .mask-fade-radial {
+    mask-image: radial-gradient(
+      ellipse 70% 60% at 50% 30%,
+      black 20%,
+      transparent 75%
+    );
+  }
+
+  /* Legacy card class, remapped onto the GUI so old sections still read right. */
+  .card {
+    background-color: var(--panel-face);
+    border-style: solid;
+    border-width: var(--bevel-panel);
+    border-color: var(--panel-bevel-light) var(--panel-bevel-dark)
+      var(--panel-bevel-dark) var(--panel-bevel-light);
+    border-radius: 0;
+  }
+  .card-interactive:hover {
+    filter: brightness(1.04);
+  }
+
+  .glass {
+    background-color: var(--panel-face);
+  }
+
+  /* While the inventory GUI is open, the top bar goes away. 4a shows the paused
+     world behind the scrim, not the site chrome, and the header was bleeding
+     through the gaps between the tabs. Set by HomeStage. */
+  body[data-inventory-open] > header {
+    display: none;
+  }
+
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* ============================================================================
+   KEYFRAMES
+   Step timing throughout. Smooth interpolation is the one thing that would
+   make this read as a website rather than a game.
+   ========================================================================= */
+
+/* Clouds drift by moving their own background, 0 to 240px over 40s. */
+@keyframes cloud-drift {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: 240px;
+  }
+}
+
+/* Two-frame hover bob. steps(2) is deliberate: no in-between position. */
+@keyframes sprite-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scrim-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 var(--gold);
+  }
+  70% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
 }
