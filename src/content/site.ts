@@ -37,7 +37,7 @@ export const site = define(
     // Drives OG tags, canonical URLs, sitemap.xml and robots.txt. Currently the
     // Vercel alias; swap in the real domain once one is registered and nothing
     // else needs to change.
-    siteUrl: "https://rishirajfs.vercel.app",
+    siteUrl: "https://rishinagarajan.vercel.app",
 
     socials: [
       {
