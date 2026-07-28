@@ -151,5 +151,15 @@ version:
       is a colour chip via `<ItemChip>` until then, which is deliberate but
       unfinished-looking in places, notably the character render slots.
 
-Deploys to Vercel with no configuration. `GITHUB_TOKEN` is the only optional
-environment variable.
+## Deploying
+
+Live at **https://rishinagarajan.vercel.app**, on Vercel's free Hobby plan.
+
+`main` is the production branch and the GitHub repo is connected, so pushing to
+`main` builds and deploys. No configuration needed: Vercel detects Next.js.
+
+`GITHUB_TOKEN` is the only environment variable, and it is optional. Without it
+the live repo-stats block on project pages hides itself whenever GitHub's 60/hr
+unauthenticated limit is hit. A read-only, no-scope token fixes that.
+
+Manual deploy, if you need one: `npx vercel --prod`.
