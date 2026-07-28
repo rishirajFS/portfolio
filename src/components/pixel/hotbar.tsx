@@ -8,6 +8,7 @@ import { useEffect, useRef } from "react";
 import { ItemChip, Panel, Slot } from "@/components/pixel/panel";
 import { site } from "@/content";
 import { cn } from "@/lib/cn";
+import { leavesApp, opensNewTab } from "@/lib/links";
 import { useScrollSpy } from "@/lib/use-scroll-spy";
 
 /**
@@ -67,13 +68,6 @@ type Entry = {
   sectionId: string | null;
 };
 
-function leavesApp(href: string) {
-  if (/^(https?:|mailto:)/.test(href)) return true;
-  // A static file (the résumé PDF) is not a route, so it must not be handed to
-  // the client router.
-  return /\.[a-z0-9]{2,4}$/i.test(href.split("#")[0]);
-}
-
 function entryFor(label: string, href: string, chip: string): Entry {
   return {
     label,
@@ -109,7 +103,7 @@ function SlotLink({
   ...rest
 }: ComponentProps<"a"> & { href: string; external: boolean }) {
   if (external) {
-    const newTab = /^https?:/.test(href);
+    const newTab = opensNewTab(href);
     return (
       <a
         ref={ref}

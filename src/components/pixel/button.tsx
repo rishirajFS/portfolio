@@ -2,6 +2,7 @@ import NextLink from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "@/lib/cn";
+import { leavesApp, opensNewTab } from "@/lib/links";
 
 /**
  * Beveled GUI buttons.
@@ -98,21 +99,39 @@ export function PixelButtonLink({
     ComponentProps<typeof NextLink>,
     "href" | "children" | "className"
   >) {
-  const isExternal =
-    external ?? (/^https?:\/\//.test(href) || href.startsWith("mailto:"));
+  // `leavesApp` also catches static files like the résumé PDF. Those must not go
+  // through next/link, which would prefetch them as an RSC route and 404.
+  const isExternal = external ?? leavesApp(href);
+  const newTab = opensNewTab(href);
+
+  const inner = (
+    <>
+      {chip && <Chip color={chip} />}
+      {children}
+      {newTab && <span className="sr-only">(opens in a new tab)</span>}
+    </>
+  );
+
+  if (isExternal) {
+    return (
+      <a
+        href={href}
+        className={classes(variant, size, className)}
+        {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : null)}
+        {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {inner}
+      </a>
+    );
+  }
 
   return (
     <NextLink
       href={href}
       className={classes(variant, size, className)}
-      {...(isExternal
-        ? { target: "_blank", rel: "noopener noreferrer" }
-        : undefined)}
       {...rest}
     >
-      {chip && <Chip color={chip} />}
-      {children}
-      {isExternal && <span className="sr-only">(opens in a new tab)</span>}
+      {inner}
     </NextLink>
   );
 }

@@ -34,9 +34,10 @@ export const site = define(
 
     resumePath: "/Rishiraj_Nagarajan_Resume.pdf",
 
-    // Update this to the real domain before launch. It drives OG tags,
-    // canonical URLs, sitemap.xml and robots.txt.
-    siteUrl: "https://rishirajnagarajan.com",
+    // Drives OG tags, canonical URLs, sitemap.xml and robots.txt. Currently the
+    // Vercel alias; swap in the real domain once one is registered and nothing
+    // else needs to change.
+    siteUrl: "https://rishirajfs.vercel.app",
 
     socials: [
       {
