@@ -16,6 +16,7 @@ export const site = define(
     // The hero says what the work is, then lists it with numbers. No adjectives:
     // the projects are the argument, this is just the index.
     headline: "ML systems, applied LLMs, and evaluation that can say no.",
+    heroWords: ["Rishiraj", "builds", "systems"],
     subheadline:
       "I've shipped ML systems since 2025. That includes a cache eviction policy upstreamed to SGLang that cut P99 first-token latency 37.7%, an agent that turns production stack traces into reviewed pull requests, a benchmark for how models stop being honest mid-conversation, and a poker bot that won 59.6% of 381 rated matches.",
 

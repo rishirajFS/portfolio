@@ -33,27 +33,6 @@ import { languageColor, rarityColor, rarityLabel } from "@/lib/languages";
 
 /* ------------------------------------------------------------------ headline */
 
-/**
- * Three stacked words. The handoff's own copy ("RISHI / BUILDS / SYSTEMS") is
- * marked placeholder, so these are the real ones, read out of the content
- * rather than written here:
- *
- *   line 1  first name, from site.name
- *   line 2  the verb site.headline opens with ("I build LLM systems..."), put
- *           in the third person
- *   line 3  the noun in site.role ("ML Systems Engineer"). It is what every
- *           project on the site has in common, so it gets the gold.
- *
- * Derived, so editing content/site.ts moves the headline with it instead of
- * leaving a stale slogan behind.
- */
-function headlineWords() {
-  const [firstName] = site.name.split(" ");
-  const verb = site.headline.split(" ")[1];
-  const noun = site.role.split(" ")[1];
-
-  return [firstName, `${verb}s`, noun].map((word) => word.toUpperCase());
-}
 
 /* ------------------------------------------------------------------- content */
 
@@ -142,7 +121,7 @@ export function Hero({
 }: {
   onOpenInventory?: () => void;
 }) {
-  const [line1, line2, line3] = headlineWords();
+  const [line1, line2, line3] = site.heroWords;
   const languages = equippedLanguages();
 
   return (

@@ -70,6 +70,16 @@ export const siteSchema = z.object({
   role: z.string().min(1),
   /** One line at the very top of the page. Under ~100 chars reads best. */
   headline: z.string().min(1),
+  /**
+   * The three stacked words of the hero, in order. The third takes the gold.
+   *
+   * Explicit rather than derived. These used to be pulled out of `headline` by
+   * splitting on spaces and taking index 1, which worked exactly as long as the
+   * headline began "I build ...". Rewriting the headline turned the hero into
+   * "RISHIRAJ / SYSTEMS,S / SYSTEMS" and shipped it. Typed as a 3-tuple so the
+   * count cannot drift either.
+   */
+  heroWords: z.tuple([z.string().min(1), z.string().min(1), z.string().min(1)]),
   /** Two or three sentences under the headline. */
   subheadline: z.string().min(1),
   location: z.string().min(1),
