@@ -121,9 +121,14 @@ export const projectTier = z.enum(["featured", "secondary", "minor"]);
 
 export const projectSchema = z.object({
   slug,
+  /** Short noun phrase. "Prefix cache eviction", not a sentence. */
   title: z.string().min(1),
-  /** Under ~90 chars. Shown in cards and as the page subtitle. */
-  tagline: z.string().min(1),
+  /**
+   * The context line, mid-dot separated: discipline, then where it happened.
+   * "ML systems · CMU 11-868 · three-person team". This carries the framing that
+   * used to be spread across a tagline, a status badge and a date range.
+   */
+  kind: z.string().min(1),
   tier: projectTier,
   /** Grouping label for filters. */
   category: z.enum([
@@ -138,25 +143,42 @@ export const projectSchema = z.object({
   end: dateLabel.optional(),
   sortKey,
   status: z.enum(["active", "shipped", "in-review", "archived", "in-progress"]),
-  /** 2-4 sentences. Card body and page lede. */
-  summary: z.string().min(1),
-  problem: z.string().optional(),
-  approach: z.string().optional(),
-  /** Prose describing structure and data flow. */
-  architecture: z.string().optional(),
-  /** The single most interesting technical detail. */
-  technicalDepth: z.string().optional(),
-  highlights: z.array(z.string()).default([]),
+
+  /**
+   * The whole description. ONE paragraph, opening with a verb, 55 words or
+   * fewer. This is the only prose most visitors read, so it states what was
+   * built and the fact that makes it interesting, and nothing else.
+   *
+   * The 55-word ceiling is enforced, not advisory. It replaced five separate
+   * prose blocks (summary, problem, approach, architecture, technicalDepth)
+   * that between them ran to 500 words on the longest project, and the cap is
+   * the only thing stopping them growing back.
+   */
+  description: z
+    .string()
+    .min(1)
+    .refine((v) => v.trim().split(/\s+/).length <= 55, {
+      message: "description must be 55 words or fewer, see the field doc",
+    }),
+
+  /**
+   * The detail page's one extra paragraph: the thing a sharp engineer would
+   * actually want to know. 70 words or fewer. Omit it rather than pad it.
+   */
+  note: z
+    .string()
+    .refine((v) => v.trim().split(/\s+/).length <= 70, {
+      message: "note must be 70 words or fewer",
+    })
+    .optional(),
+
   metrics: z.array(metricSchema).default([]),
   stack: z.array(z.string()).default([]),
   links: z.array(linkSchema).default([]),
   /** GitHub `owner/name`, enables live stats via lib/github.ts. */
   repo: z.string().regex(/^[\w.-]+\/[\w.-]+$/).optional(),
-  /** Path under /public. Falls back to a generated placeholder when absent. */
   image: z.string().optional(),
   imageAlt: z.string().optional(),
-  /** Renders a "collaborative work" note. */
-  collaborative: z.boolean().default(false),
   /** Set when a claim could not be verified from source. Dev-only surface. */
   caveats: z.string().optional(),
 });

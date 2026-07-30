@@ -13,9 +13,11 @@ export const site = define(
     shortName: "Rishiraj",
     role: "ML Systems Engineer",
 
-    headline: "I build LLM systems, then try to prove they actually work.",
+    // The hero says what the work is, then lists it with numbers. No adjectives:
+    // the projects are the argument, this is just the index.
+    headline: "ML systems, applied LLMs, and evaluation that can say no.",
     subheadline:
-      "ML systems engineer and master's candidate at Carnegie Mellon. I work on making language models cheaper to serve, agent pipelines that survive production, and evaluation honest enough to tell me when I'm wrong.",
+      "I've shipped ML systems since 2025. That includes a cache eviction policy upstreamed to SGLang that cut P99 first-token latency 37.7%, an agent that turns production stack traces into reviewed pull requests, a benchmark for how models stop being honest mid-conversation, and a poker bot that won 59.6% of 381 rated matches.",
 
     location: "Pittsburgh, PA",
     availability: "Open to Summer 2027 and full-time roles from Dec 2026",
@@ -23,14 +25,17 @@ export const site = define(
     email: "rishi.nagarajan.work@gmail.com",
     phone: "(412) 339-6925",
 
+    // One bio, not two. The old pair ran to 160 words and the long one mostly
+    // restated the project list that is already on the page.
     bio: {
       short:
-        "ML systems engineer at Different Labs and a master's candidate at Carnegie Mellon. I work where model quality meets serving cost: cache eviction, agent pipelines, and evaluation that survives contact with reality.",
-      long: "I'm finishing a Master of Computational Data Science at Carnegie Mellon in December 2026, and I work as an ML systems engineer at Different Labs. Most of what I do sits at the seam between a model and the system serving it: cache eviction policies for LLM inference, a pipeline that learns editing preferences from human edits and gates them behind a verifier, an agent that reads production error logs and opens pull requests. Alongside that I research language model sycophancy at the Language Technologies Institute, where I built a benchmark for how conversation erodes honest judgment. The recurring theme is measurement. I care less about a number going up than about whether it was measured in a way that could have gone down.",
+        "ML systems engineer at Different Labs, finishing a Master of Computational Data Science at Carnegie Mellon in December 2026. I work at the seam between a model and the system serving it.",
+      long: "I work at the seam between a model and the system serving it: cache eviction for inference, pipelines that learn from human edits and gate them behind a verifier, agents that read production logs. Alongside that I research language model sycophancy at the Language Technologies Institute.",
     },
 
+    // Cut from 105 words. The examples it listed are all on the page already.
     throughLine:
-      "I distrust the measurement before I distrust the model. In each of these projects the load-bearing work was the thing that could have falsified the result: a cross-validation split that broke a published benchmark and left me with an honest baseline instead of a good number, a verifier that re-reads every proposed rule's cited evidence against the source before the rule is allowed to influence anything, a benchmark designed to attribute an effect rather than just observe it, and a cache study whose real finding was that the code path I was optimizing never ran. A speedup is cheap. The harness that lets it fail is the expensive part, so I build that first and report what it says.",
+      "I distrust the measurement before I distrust the model. A speedup is cheap; the harness that lets it fail is the expensive part, so I build that first and report what it says, including when it says the effect was smaller than I hoped.",
 
     resumePath: "/Rishiraj_Nagarajan_Resume.pdf",
 

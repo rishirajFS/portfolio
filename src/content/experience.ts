@@ -19,12 +19,11 @@ export const experience = define(
       sortKey: "2026-05",
       current: true,
       blurb:
-        "Teaching a generation system what a human would have changed, and proving the lesson stuck.",
+        "Applied-LLM infrastructure: teaching a generation system what a human would have changed, and proving the lesson stuck.",
       bullets: [
-        "Built a system that learns styling preferences by comparing a first draft to the human-edited final version, then feeds those preferences back in at generation time. A deterministic verifier re-checks each rule's cited evidence against the original edit before the rule is allowed to influence anything.",
-        "Validated it with an eval harness measuring how far the output still sits from the human's final version, which is the metric that actually tracks whether a person had to fix it.",
-        "Built the weekly pipeline around it on Apache Temporal, pairing a Java/Spring Boot orchestrator with a Python/FastAPI agent whose tool-use loop proposes, reinforces and retires rules by support-count voting.",
-        "Shipped a brand-intelligence agent to production on Railway covering Meta, Google and LinkedIn, profiling brand voice from around 150 scraped ads per run. FastAPI, Redis, Postgres, multi-tenant, CI/CD.",
+        "Built a system that learns styling preferences by diffing a first draft against the human-edited final version, gated by a verifier that re-checks each rule's cited evidence against the source before it can influence anything.",
+        "Built the weekly pipeline on Apache Temporal, pairing a Spring Boot orchestrator with a FastAPI agent that proposes, reinforces and retires rules by support-count voting.",
+        "Shipped a multi-platform brand-intelligence agent to production on Railway, profiling brand voice from around 150 scraped ads per run.",
       ],
       tags: [
         "Apache Temporal",
@@ -50,8 +49,7 @@ export const experience = define(
       blurb:
         "Measuring how conversation pulls language models away from honest judgment. Advised by Prof. Maarten Sap.",
       bullets: [
-        "First author on a paper in preparation about how conversational context causes language models to abandon honest social judgments. Results available on request.",
-        "Built a 100-scenario benchmark quantifying that drift across multi-turn advice conversations, and isolated the self-justification turn as the point most associated with it.",
+        "First author on a paper in preparation. Built a 100-scenario benchmark for multi-turn sycophantic drift and isolated the turn where honesty gives way. Results available on request.",
       ],
       tags: ["LLM Evaluation", "Benchmark Design", "Statistics"],
     },
@@ -80,9 +78,8 @@ export const experience = define(
       blurb:
         "Replaced the spreadsheet a national industry was forecasting demand with.",
       bullets: [
-        "Trained and benchmarked Random Forest and XGBoost models for national cement demand forecasting. XGBoost came in 15% more accurate by RMSE than the analyst-built Excel baseline it replaced.",
-        "Rebuilt the whole workflow end to end, feeding an executive Power BI dashboard with a district-level map of India.",
-        "Built the seasonality-aligned feature pipeline on web scrapers I wrote, with SMOTE for class imbalance, and presented the findings directly to the CEO.",
+        "Trained XGBoost for national cement demand forecasting, 15% more accurate by RMSE than the analyst-built Excel baseline it replaced.",
+        "Built the feature pipeline on web scrapers I wrote and fed an executive dashboard with a district-level map of India. Presented findings to the CEO.",
       ],
       tags: ["XGBoost", "scikit-learn", "Power BI", "Web Scraping"],
     },

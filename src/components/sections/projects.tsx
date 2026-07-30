@@ -24,7 +24,6 @@ export function Projects() {
         eyebrow="Selected work"
         index="03"
         title="Projects"
-        lede="Four in depth, the rest in brief. Each write-up leads with the problem and the number that settles it."
         action={
           <PixelButtonLink href="/inventory" variant="nav" size="base">
             Open inventory

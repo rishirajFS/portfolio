@@ -34,7 +34,6 @@ export function Experience() {
         eyebrow="Experience"
         index="02"
         title="Where I've worked"
-        lede="Four roles, one habit: build the thing, then build the thing that tells you whether it worked."
       />
 
       <Stagger stagger={0.08} className="flex flex-col gap-6">

@@ -30,7 +30,6 @@ export function Research() {
         eyebrow="Research"
         index="04"
         title="Publications"
-        lede="Work at CMU's Language Technologies Institute on how conversational context erodes honest model judgment."
       />
 
       <div className="flex flex-col gap-6">

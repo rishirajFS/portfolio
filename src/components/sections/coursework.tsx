@@ -21,7 +21,6 @@ export function Coursework() {
         eyebrow="Coursework"
         index="06"
         title="Graduate implementations"
-        lede="Assignments with public code, grouped by course."
       />
 
       <Reveal>

@@ -14,12 +14,7 @@ import {
   TooltipTitle,
 } from "@/components/pixel/panel";
 import { World } from "@/components/pixel/world";
-import {
-  ItemFrame,
-  RarityTag,
-  StatRow,
-  rarityForTier,
-} from "@/components/ui/project-card";
+import { ItemFrame, StatRow } from "@/components/ui/project-card";
 import { detailedProjects, getProject, type Project } from "@/content";
 import { cn } from "@/lib/cn";
 import { compactNumber, dateRange, monthYear } from "@/lib/format";
@@ -44,7 +39,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
   return pageMetadata({
     title: project.title,
-    description: project.tagline,
+    description: project.description,
     path: `/projects/${project.slug}`,
     image: project.image,
     type: "article",
@@ -99,16 +94,6 @@ export default async function ProjectPage({ params }: Params) {
   const index = detailedProjects.findIndex((p) => p.slug === project.slug);
   const next = detailedProjects[(index + 1) % detailedProjects.length];
 
-  const body: Array<{ heading: string; content: string }> = [
-    project.problem && { heading: "The problem", content: project.problem },
-    project.approach && { heading: "The approach", content: project.approach },
-    project.architecture && {
-      heading: "How it's built",
-      content: project.architecture,
-    },
-  ].filter((s): s is { heading: string; content: string } => Boolean(s));
-
-  const rarity = rarityForTier(project.tier);
   const showCaveats =
     Boolean(project.caveats) && process.env.NODE_ENV !== "production";
 
@@ -127,27 +112,20 @@ export default async function ProjectPage({ params }: Params) {
             {project.title}
           </h1>
 
-          {/* Body plate: the item card for this piece of loot. Everything small
-              lives on it, because 9px type on open sky does not read. */}
+          {/* Body plate: the item card. Context line and dates, nothing else;
+              the paragraph gets its own readout below. */}
           <div className="max-w-[640px] border-4 border-ring-black bg-plate p-4">
-            <p className="font-display text-base leading-relaxed text-plate-text">
-              {project.tagline}
+            <p className="font-display text-xs leading-relaxed text-plate-text">
+              {project.kind}
+              <span aria-hidden className="mx-1.5">
+                ·
+              </span>
+              {dateRange(project.start, project.end)}
+              <span aria-hidden className="mx-1.5">
+                ·
+              </span>
+              <span className="text-gold">{STATUS_LABEL[project.status]}</span>
             </p>
-
-            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
-              <RarityTag rarity={rarity} />
-              <span className="font-display text-xs uppercase text-gold">
-                {STATUS_LABEL[project.status]}
-              </span>
-              <span className="font-display text-xs text-plate-text">
-                {dateRange(project.start, project.end)}
-              </span>
-              {project.collaborative && (
-                <span className="font-display text-xs text-plate-text">
-                  Collaborative work
-                </span>
-              )}
-            </div>
           </div>
 
           {/* Empty on purpose for the unpublished paper, so nothing renders. */}
@@ -185,53 +163,29 @@ export default async function ProjectPage({ params }: Params) {
               </Panel>
             )}
 
-            {/* Write-up */}
+            {/* The one paragraph. Capped at 55 words in content, so there is
+                nothing here to sub-divide into problem/approach/architecture. */}
             <Panel className="p-4">
               <PanelHeading right="Log">Write-up</PanelHeading>
               <Screen className="mt-3">
-                <div className="prose-site">
-                  <p className="text-white">{project.summary}</p>
-
-                  {body.map((block) => (
-                    <section key={block.heading}>
-                      <h2>{block.heading}</h2>
-                      <p>{block.content}</p>
-                    </section>
-                  ))}
-                </div>
+                <p className="prose-site">{project.description}</p>
               </Screen>
             </Panel>
 
             {/* The one technical detail worth stopping on. Tooltip treatment,
                 because this is the item description, not chrome. */}
-            {project.technicalDepth && (
+            {project.note && (
               <Tooltip solid className="p-4">
                 <p className="font-display text-xs uppercase tracking-wide text-tooltip-meta">
                   The interesting part
                 </p>
                 <div className="prose-site mt-3">
-                  <p>{project.technicalDepth}</p>
+                  <p>{project.note}</p>
                 </div>
               </Tooltip>
             )}
 
             {/* Highlights. prose-site already draws square gold bullets. */}
-            {project.highlights.length > 0 && (
-              <Panel className="p-4">
-                <PanelHeading right={`${project.highlights.length}`}>
-                  What it does
-                </PanelHeading>
-                <Screen className="mt-3">
-                  <div className="prose-site">
-                    <ul>
-                      {project.highlights.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </Screen>
-              </Panel>
-            )}
           </div>
 
           {/* ---------------------------------------------------------- sidebar */}
@@ -347,7 +301,7 @@ export default async function ProjectPage({ params }: Params) {
                 {next.title}
               </span>
               <span className="font-display text-2xs leading-normal text-chrome-soft">
-                {next.tagline}
+                {next.kind}
               </span>
             </div>
             <span

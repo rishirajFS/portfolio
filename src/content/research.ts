@@ -24,11 +24,10 @@ export const publications = define(
       advisor: "Prof. Maarten Sap",
       affiliation: "Carnegie Mellon University, Language Technologies Institute",
       abstract:
-        "Sycophancy in language models is usually measured in a single turn: a user states a position and the model agrees. Real advice-seeking conversations run longer, and the more consequential failure is gradual. A model answers honestly at the first turn and validates by the fifth. This work introduces a 100-scenario benchmark that measures that shift as a trajectory rather than a single before-and-after, and identifies the point in a conversation where honest judgment gives way.",
+        "Sycophancy is usually measured in a single turn: a user states a position and the model agrees. Real advice conversations run longer, and the consequential failure is gradual. This introduces a 100-scenario benchmark that measures the shift as a trajectory and identifies where in a conversation honest judgment gives way.",
       findings: [
-        "Judgment drifts measurably across a multi-turn advice conversation, even when the underlying facts never change.",
-        "The self-justification turn, where a user begins defending their own behavior, is the point most strongly associated with that drift.",
-        "The effect tracks how the situation is framed and what the model believes about the user, not simply whether the user disagrees with it.",
+        "Judgment drifts measurably across a multi-turn conversation even when the underlying facts never change.",
+        "The self-justification turn, where a user begins defending their own behaviour, is the point most associated with that drift.",
       ],
       links: [],
       // Results available on request. Add a preprint or arXiv link here once the

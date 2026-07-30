@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { ItemChip, Panel, PanelHeading, Slot, Subpanel } from "@/components/pixel/panel";
+import { ItemChip, Panel, Slot, Subpanel } from "@/components/pixel/panel";
 import type { Metric, Project, ProjectTier, Rarity } from "@/content";
 import { cn } from "@/lib/cn";
 import { dateRange } from "@/lib/format";
@@ -22,14 +22,6 @@ import { languageColor, rarityColor, rarityLabel } from "@/lib/languages";
  * project detail page builds the same item out of them at a larger size, and
  * the tier-to-rarity mapping must not drift between the two.
  */
-
-const STATUS_LABEL: Record<Project["status"], string> = {
-  active: "Active",
-  "in-progress": "In progress",
-  "in-review": "Under review",
-  shipped: "Shipped",
-  archived: "Archived",
-};
 
 /** Item rarity mirrors project tier. This is what colours every frame. */
 export function rarityForTier(tier: ProjectTier): Rarity {
@@ -216,18 +208,66 @@ function StackSlots({
   );
 }
 
-/** The meta line every card carries: rarity, status, dates. */
-function ItemMeta({ project }: { project: Project }) {
+/**
+ * The context line: discipline, where it happened, dates. Mid-dot separated,
+ * one line, no wrapping onto four rows of badges. This replaced a rarity plate,
+ * a status word and a date range stacked on top of each other.
+ */
+function KindLine({ project }: { project: Project }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-      <RarityTag rarity={rarityForTier(project.tier)} />
-      <span className="emboss font-display text-2xs uppercase text-chrome-soft">
-        {STATUS_LABEL[project.status]}
+    <p className="font-display text-2xs leading-normal text-chrome-dim">
+      {project.kind}
+      <span aria-hidden className="mx-1.5">
+        ·
       </span>
-      <span className="font-display text-2xs text-chrome-dim">
-        {dateRange(project.start, project.end)}
-      </span>
-    </div>
+      {dateRange(project.start, project.end)}
+    </p>
+  );
+}
+
+/**
+ * The stat line: every number on one row, separated by mid-dots.
+ *
+ * The stat block treatment (label above, value in a recessed readout) is still
+ * used on detail pages via StatRow, where there is room for it. In a card it
+ * cost three lines per metric, so cards get this instead: the numbers, inline,
+ * scannable in one pass.
+ */
+export function StatLine({
+  metrics,
+  className,
+  /**
+   * Which surface this sits on. The label colour has to flip: `chrome-soft` is
+   * #3a3a3a, which is correct on the #c6c6c6 panel face and nearly invisible on
+   * the dark readout. Defaults to "dark" because that is where cards put it.
+   */
+  tone = "dark",
+}: {
+  metrics: readonly Metric[];
+  className?: string;
+  tone?: "dark" | "light";
+}) {
+  if (metrics.length === 0) return null;
+
+  const label = tone === "dark" ? "text-[#b4b4c0]" : "text-chrome-soft";
+  const sep = tone === "dark" ? "text-[#6a6a78]" : "text-chrome-dim";
+
+  return (
+    <p className={cn("font-display text-2xs leading-relaxed", className)}>
+      {metrics.map((m, i) => (
+        <span key={m.label}>
+          {i > 0 && (
+            <span aria-hidden className={cn("mx-1.5", sep)}>
+              ·
+            </span>
+          )}
+          <span data-numeric className="text-gold">
+            {m.value}
+          </span>{" "}
+          <span className={label}>{m.label.toLowerCase()}</span>
+        </span>
+      ))}
+    </p>
   );
 }
 
@@ -242,8 +282,12 @@ function OpenLabel({ children }: { children: ReactNode }) {
 }
 
 /**
- * Featured project: the write-up panel beside its stat block.
- * `index` renders the counter and decides which side the stats sit on.
+ * Featured project. One panel: numbered title, context line, the paragraph, the
+ * stat line, the stack.
+ *
+ * Previously two panels side by side, one holding five prose blocks and the
+ * other a four-cell stat grid. With the description capped at 55 words there is
+ * nothing to justify the split, and a single column reads faster.
  */
 export function FeaturedProjectCard({
   project,
@@ -252,145 +296,112 @@ export function FeaturedProjectCard({
   project: Project;
   index: number;
 }) {
-  const flip = index % 2 === 1;
-
   return (
     <article className="group relative">
       <Link
         href={`/projects/${project.slug}`}
         className="absolute inset-0 z-10"
-        aria-label={`${project.title}: ${project.tagline}`}
+        aria-label={`${project.title}: ${project.description}`}
       />
 
-      <div
-        className={cn(
-          "grid items-start gap-4 lg:grid-cols-12",
-          flip && "lg:[&>*:first-child]:order-2",
-        )}
-      >
-        {/* Write-up */}
-        <Panel className="flex flex-col gap-3 p-4 group-hover:brightness-105 lg:col-span-7">
-          <div className="flex items-start gap-3">
-            <ItemFrame project={project} size={56} />
-            <div className="flex min-w-0 flex-col gap-2">
-              <div className="flex items-baseline gap-2">
-                <span
-                  className="font-display text-2xs text-chrome-dim"
-                  data-numeric
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="emboss font-display text-md leading-snug text-chrome">
-                  {project.title}
-                </h3>
-              </div>
-              <ItemMeta project={project} />
+      <Panel className="p-4 duration-fast group-hover:brightness-105 sm:p-5">
+        <div className="flex items-start gap-4">
+          <ItemFrame project={project} size={56} />
+
+          <div className="min-w-0 flex-1">
+            <div className="flex items-baseline gap-2">
+              <span
+                data-numeric
+                className="font-display text-2xs text-chrome-dim"
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3 className="emboss font-display text-base leading-snug text-chrome">
+                {project.title}
+              </h3>
             </div>
-          </div>
-
-          <p className="font-display text-xs leading-normal text-chrome-soft">
-            {project.tagline}
-          </p>
-
-          {/* The reading face, because three sentences of Silkscreen is a wall. */}
-          <p className="font-read text-base leading-relaxed text-chrome-soft">
-            {project.summary}
-          </p>
-
-          <StackSlots items={project.stack} max={7} className="mt-1" />
-
-          <div className="mt-1">
-            <OpenLabel>Read the write-up</OpenLabel>
-          </div>
-        </Panel>
-
-        {/* Stat block. Stands in for a screenshot until one exists. */}
-        <Panel className="flex flex-col gap-3 p-4 group-hover:brightness-105 lg:col-span-5">
-          <PanelHeading
-            right={
-              project.metrics.length > 0
-                ? `${Math.min(project.metrics.length, 4)} recorded`
-                : undefined
-            }
-          >
-            {project.metrics.length > 0 ? "Stats" : "Item"}
-          </PanelHeading>
-
-          {project.metrics.length > 0 ? (
-            <div className="flex flex-col gap-1">
-              {project.metrics.slice(0, 4).map((metric) => (
-                <StatRow key={metric.label} metric={metric} />
-              ))}
-            </div>
-          ) : (
-            <Slot className="flex min-h-[176px] items-center justify-center">
-              <ItemChip color={projectChipColor(project)} size={48} bob />
-            </Slot>
-          )}
-        </Panel>
-      </div>
-    </article>
-  );
-}
-
-/** Compact card for the grid. */
-export function ProjectCard({ project }: { project: Project }) {
-  return (
-    <article className="group relative h-full">
-      <Link
-        href={`/projects/${project.slug}`}
-        className="absolute inset-0 z-10"
-        aria-label={`${project.title}: ${project.tagline}`}
-      />
-
-      <Panel className="flex h-full flex-col gap-3 p-3 group-hover:brightness-105">
-        <div className="flex items-start gap-3">
-          <ItemFrame project={project} size={48} />
-          <div className="flex min-w-0 flex-col gap-2">
-            <h3 className="emboss font-display text-base leading-snug text-chrome">
-              {project.title}
-            </h3>
-            <RarityTag rarity={rarityForTier(project.tier)} />
+            <KindLine project={project} />
           </div>
         </div>
 
-        <p className="font-display text-2xs leading-normal text-chrome-soft">
-          {project.tagline}
-        </p>
+        {/* The one paragraph. On the dark readout because that is where prose is
+            legible in this theme. */}
+        <div
+          className="mt-4 border-[3px] p-3 sm:p-4"
+          style={{
+            backgroundColor: "var(--panel-ring)",
+            borderColor: "#000000 #4a4a4a #4a4a4a #000000",
+          }}
+        >
+          <p className="prose-site !text-[13px]">{project.description}</p>
+          <StatLine metrics={project.metrics} className="mt-3" />
+        </div>
 
-        {project.metrics.length > 0 && (
-          <div className="flex flex-col gap-1">
-            {project.metrics.slice(0, 2).map((metric) => (
-              <StatRow key={metric.label} metric={metric} size="sm" />
-            ))}
-          </div>
-        )}
-
-        <div className="mt-auto flex flex-col gap-3 pt-1">
-          <StackSlots items={project.stack} max={4} />
-          <OpenLabel>Open</OpenLabel>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <StackSlots items={project.stack} max={6} />
+          <OpenLabel>Read</OpenLabel>
         </div>
       </Panel>
     </article>
   );
 }
 
-/** One-line entry for work with no detail page. */
+/** Grid card. Same anatomy, tighter, no counter. */
+export function ProjectCard({ project }: { project: Project }) {
+  return (
+    <article className="group relative h-full">
+      <Link
+        href={`/projects/${project.slug}`}
+        className="absolute inset-0 z-10"
+        aria-label={`${project.title}: ${project.description}`}
+      />
+
+      <Panel className="flex h-full flex-col p-4 duration-fast group-hover:brightness-105">
+        <div className="flex items-start gap-3">
+          <ItemFrame project={project} size={44} />
+          <div className="min-w-0 flex-1">
+            <h3 className="emboss font-display text-xs leading-snug text-chrome">
+              {project.title}
+            </h3>
+            <KindLine project={project} />
+          </div>
+        </div>
+
+        <div
+          className="mt-3 border-[3px] p-3"
+          style={{
+            backgroundColor: "var(--panel-ring)",
+            borderColor: "#000000 #4a4a4a #4a4a4a #000000",
+          }}
+        >
+          <p className="prose-site !text-[12px]">{project.description}</p>
+          <StatLine metrics={project.metrics.slice(0, 3)} className="mt-2" />
+        </div>
+
+        <div className="mt-auto pt-3">
+          <StackSlots items={project.stack} max={4} />
+        </div>
+      </Panel>
+    </article>
+  );
+}
+
+/** One row, for work with no detail page. */
 export function ProjectRow({ project }: { project: Project }) {
   return (
-    <Subpanel className="mt-1 flex flex-col gap-1 px-3 py-2 first:mt-0 sm:flex-row sm:items-baseline sm:gap-4">
-      <span className="flex items-center gap-2 sm:w-56 sm:shrink-0">
-        <ItemChip color={projectChipColor(project)} size={10} />
-        <span className="emboss font-display text-xs leading-snug text-chrome">
+    <Subpanel className="flex flex-col gap-1 px-3 py-2">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+        <span className="emboss font-display text-2xs uppercase text-chrome">
           {project.title}
         </span>
-      </span>
-      <span className="flex-1 font-display text-2xs leading-normal text-chrome-soft">
-        {project.tagline}
-      </span>
-      <span className="font-display text-2xs text-chrome-dim sm:shrink-0">
-        {dateRange(project.start, project.end)}
-      </span>
+        <span className="font-display text-2xs text-chrome-dim">
+          {project.kind}
+        </span>
+      </div>
+      <p className="font-display text-2xs leading-relaxed text-chrome-soft">
+        {project.description}
+      </p>
+      <StatLine metrics={project.metrics} tone="light" />
     </Subpanel>
   );
 }

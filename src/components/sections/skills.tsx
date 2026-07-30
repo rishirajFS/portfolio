@@ -44,7 +44,6 @@ export function Skills() {
         eyebrow="Stack"
         index="05"
         title="What I work with"
-        lede="Ordered by depth rather than alphabetically. The things nearer the front are the ones with shipped code behind them."
       />
 
       <Stagger
