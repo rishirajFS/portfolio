@@ -18,7 +18,7 @@ export const site = define(
     headline: "ML systems, applied LLMs, and evaluation that can say no.",
     heroWords: ["Rishiraj", "builds", "systems"],
     subheadline:
-      "I've shipped ML systems since 2025. That includes a cache eviction policy co-authored for SGLang that cut P99 first-token latency 37.7%, a benchmark showing LLM honesty drifting from 1% to 24% over five turns of conversation, an RL environment for agents facing silently changing APIs, and shared memory that saved 300 user-hours a month.",
+      "I've shipped ML systems since 2025. That includes a cache eviction policy co-authored for SGLang that cut P99 first-token latency 37.7% in benchmarks, a benchmark showing LLM honesty drifting from 1% to 24% over five turns of conversation, an RL environment for agents facing silently changing APIs, and shared memory that saved 300 user-hours a month.",
 
     location: "Pittsburgh, PA",
     availability: "Open to Summer 2027 and full-time roles from Dec 2026",
@@ -26,7 +26,7 @@ export const site = define(
     highlights: [
       "CMU MCDS, Dec 2026",
       "Different Labs ML intern",
-      "SGLang PR #23781",
+      "SGLang eviction policy",
       "EMNLP 2026, under review",
     ],
 

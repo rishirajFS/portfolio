@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useState } from "react";
 
 import { PixelButton, PixelButtonLink } from "@/components/pixel/button";
 import { Armor, Hearts, Hud, XpBar } from "@/components/pixel/hud";
@@ -122,6 +123,7 @@ export function Hero({
   onOpenInventory?: () => void;
 }) {
   const [line1, line2, line3] = site.heroWords;
+  const [focused, setFocused] = useState<string | null>(null);
   const languages = equippedLanguages();
 
   return (
@@ -228,7 +230,9 @@ export function Hero({
 
         {/* ------------------------------------------------ projects panel */}
         <Panel className="w-full max-w-[432px] p-3 stage:absolute stage:right-8 stage:top-[112px] stage:w-[432px]">
-          <PanelHeading right={`${items.length} items`}>Projects</PanelHeading>
+          <PanelHeading right={focused ?? `${items.length} items`}>
+            Projects
+          </PanelHeading>
 
           <ul className="mt-2 grid grid-cols-5 gap-1 stage:grid-cols-[repeat(5,76px)] stage:justify-center">
             {items.map((item) => (
@@ -236,6 +240,10 @@ export function Hero({
                 <Link
                   href={`/projects/${item.slug}`}
                   className="block size-full"
+                  onMouseEnter={() => setFocused(item.title)}
+                  onMouseLeave={() => setFocused(null)}
+                  onFocus={() => setFocused(item.title)}
+                  onBlur={() => setFocused(null)}
                   aria-label={`${item.title} (${rarityLabel(item.rarity).toLowerCase()})`}
                 >
                   <Slot

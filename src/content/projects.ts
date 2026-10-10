@@ -31,12 +31,12 @@ const data = [
     tier: "featured",
     category: "ml-systems",
     start: "Jan 2026",
-    end: "Present",
+    end: "Aug 2026",
     sortKey: "2026-01",
-    status: "in-review",
+    status: "archived",
 
     description:
-      "Co-authored a frequency-aware eviction policy for SGLang's prefix cache, upstreamed as PR #23781 in 52 lines across four files. Prototyped it first in vLLM, where 100+ benchmark runs showed the eviction path never fired at all.",
+      "Co-authored a frequency-aware eviction policy for SGLang's prefix cache, proposed upstream as PR #23781, which was closed without merging. Prototyped it first in vLLM, where 100+ benchmark runs showed the eviction path never fired at all.",
 
     note: "The vLLM prototype was the useful failure. After roughly 30 hours of GPU time, total_evictions was 0 in all 57 benchmark records. The cause is structural: V1 preempts requests before the block pool can oversubscribe, so the condition the policy existed to handle cannot occur. Moving to SGLang, whose radix cache does evict, is what made the measurement possible.",
 
@@ -60,7 +60,7 @@ const data = [
 
     links: [
       {
-        label: "SGLang PR #23781",
+        label: "SGLang PR #23781 (closed)",
         href: "https://github.com/sgl-project/sglang/pull/23781",
         icon: "pr",
         external: true,
@@ -74,7 +74,7 @@ const data = [
     ],
 
     caveats:
-      "ATTRIBUTION: PR #23781 was opened by teammate tejas-goyal; Rishi is credited as author #2 in the PR body, not as a commit author. Wording is deliberately 'co-authored', never 'submitted'. Only WLFU reached upstream, so Weighted Segmented LRU is NOT claimed. TTFT figures come from the PR body. The new resume STILL says 39.6% P99 / 26% mean on MS MARCO and 'weighting reuse by prefix depth', while the PR says 37.7%/22.8% on a Qwen2.5-7B shared-prefix workload with a scalar score. If the MS MARCO run is real, add it with its workload; otherwise align the resume. PR is currently mergeable=false with no human review. See VERIFICATION.md section 1.",
+      "PR STATE: #23781 was CLOSED UNMERGED on 2026-08-30 (checked via the GitHub API on 2026-10-10), so the site no longer says upstreamed or under review. The resume still says 'pull request under review', which is now wrong. ATTRIBUTION: PR #23781 was opened by teammate tejas-goyal; Rishi is credited as author #2 in the PR body, not as a commit author. Wording is deliberately 'co-authored', never 'submitted'. Only WLFU reached upstream, so Weighted Segmented LRU is NOT claimed. TTFT figures come from the PR body. The new resume STILL says 39.6% P99 / 26% mean on MS MARCO and 'weighting reuse by prefix depth', while the PR says 37.7%/22.8% on a Qwen2.5-7B shared-prefix workload with a scalar score. If the MS MARCO run is real, add it with its workload; otherwise align the resume. PR is currently mergeable=false with no human review. See VERIFICATION.md section 1.",
   },
 
   /* ------------------------------------------------------------------------ */

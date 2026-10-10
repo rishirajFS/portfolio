@@ -28,6 +28,11 @@ résumé dropped it. This resolves the old §6 and §8 items for the site.
 
 Still open after the swap:
 
+0. **SGLang PR #23781 is closed, unmerged (2026-08-30).** The site now says
+   "proposed upstream ... closed without merging". The résumé still says
+   "Upstream SGLang pull request under review", which is no longer true. Fix the
+   résumé line before sending it anywhere.
+
 1. **KV cache numbers.** The résumé says 39.6% P99 / 26% mean on MS MARCO and
    "weighting reuse by prefix depth". The PR says 37.7% / 22.8% on a Qwen2.5-7B
    shared-prefix workload with a scalar score. The site keeps the PR figures.
