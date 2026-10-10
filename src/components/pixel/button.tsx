@@ -101,7 +101,9 @@ export function PixelButtonLink({
   >) {
   // `leavesApp` also catches static files like the résumé PDF. Those must not go
   // through next/link, which would prefetch them as an RSC route and 404.
-  const isExternal = external ?? leavesApp(href);
+  // `||` not `??`: the content schema defaults `external` to false, and an
+  // explicit false from a social link must not override file detection.
+  const isExternal = external || leavesApp(href);
   const newTab = opensNewTab(href);
 
   const inner = (
