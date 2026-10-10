@@ -1,6 +1,6 @@
-# rishirajnagarajan.com
+# Rishiraj Nagarajan, portfolio
 
-Personal portfolio for Rishiraj Nagarajan, ML systems engineer and MCDS candidate
+Personal portfolio for Rishiraj Nagarajan, machine learning engineer and MCDS candidate
 at Carnegie Mellon, built as a 2D voxel-game interface.
 
 Next.js 16 (App Router) · React 19 · Tailwind CSS 4 · TypeScript · Motion
@@ -145,8 +145,8 @@ version:
 - [ ] Confirm the LinkedIn vanity URL
 - [ ] Decide whether the phone number belongs on a public page
 - [ ] Resolve the flagged claims in VERIFICATION.md §1, §4, §5, §6
-- [ ] Get Different Labs clearance on the experience bullets
-- [ ] Confirm the résumé PDF in `public/` is current and matches the web copy
+- [ ] Confirm Different Labs clearance on the experience figures (300 user-hours, 47%, 25%)
+- [x] Résumé PDF in `public/` replaced with the October 2026 MLE résumé; web copy mirrors it
 - [ ] Commission or source the pixel sprites (see THEME.md → Sprites). Everything
       is a colour chip via `<ItemChip>` until then, which is deliberate but
       unfinished-looking in places, notably the character render slots.

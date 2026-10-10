@@ -17,6 +17,30 @@ box **only in development** (`next dev`), never in a production build.
 
 ---
 
+## Update: new résumé (October 2026)
+
+`public/Rishiraj_Nagarajan_Resume.pdf` was replaced with the MLE résumé and the
+site content now mirrors it: Different Labs (May to Aug 2026, ended), the 11-868
+TA role, the Brandidea RAG bullet, SocialDrift headline results, and two new
+featured projects (APIShift, chart validator). Poker, self-healing agent and
+broadband moved to secondary; HARBOR moved to the "Earlier" list since the
+résumé dropped it. This resolves the old §6 and §8 items for the site.
+
+Still open after the swap:
+
+1. **KV cache numbers.** The résumé says 39.6% P99 / 26% mean on MS MARCO and
+   "weighting reuse by prefix depth". The PR says 37.7% / 22.8% on a Qwen2.5-7B
+   shared-prefix workload with a scalar score. The site keeps the PR figures.
+   If the MS MARCO run is real, publish its output and add it; otherwise align
+   the résumé down.
+2. **Not checkable from public repos:** the chart validator (no repo), the
+   APIShift GRPO figures (not in its README), and the 64% / 36K / 73%
+   SocialDrift numbers. The 1% to 24% shift is in the llm-sycophancy README.
+3. **Different Labs figures** (300 user-hours, 47%, 25%, 10+ organizations)
+   describe an employer's system. Confirm clearance.
+
+---
+
 ## 1. 🔴 KV cache eviction: attribution and scope
 
 **SGLang PR #23781 exists and is real:** "Add WLFU radix cache eviction policy",

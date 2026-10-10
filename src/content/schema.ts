@@ -84,6 +84,8 @@ export const siteSchema = z.object({
   subheadline: z.string().min(1),
   location: z.string().min(1),
   availability: z.string().optional(),
+  /** Short scannable facts shown under the hero buttons. Four or fewer. */
+  highlights: z.array(z.string()).max(4).default([]),
   email: z.string().email(),
   phone: z.string().optional(),
   bio: z.object({ short: z.string().min(1), long: z.string().min(1) }),

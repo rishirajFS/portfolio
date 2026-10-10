@@ -27,12 +27,12 @@ const CATEGORY = {
   ml: [
     "vllm-kv-tier", "llm-sycophancy", "self-healing-agent", "self-healing-agent-test",
     "pokerai", "idlhw4", "llmsyshw4", "llmsyshw_redo", "llmsys_hw3", "llmsyshw3",
-    "llmsys_hw1",
+    "llmsys_hw1", "apishift", "jev-router", "insurance-claims-sop-agent",
   ],
   swe: [
     "claude-session-manager", "pa-broadband-inequality", "cloud-docker-k8s", "cloud-dock",
     "clood", "cloud-p5", "cloud-sql-nosql", "cloud-hw3", "cloud-computing-ELASTICITY",
-    "cloud-computing-proj0",
+    "cloud-computing-proj0", "day-keeper", "neetcode-submissions",
   ],
 };
 
@@ -41,8 +41,9 @@ const RARITY = {
   "vllm-kv-tier": ["legendary", "kv-cache-eviction"],
   // Listed, but deliberately not linked: the paper is unpublished.
   "llm-sycophancy": ["legendary", null],
-  "self-healing-agent": ["legendary", "self-healing-agent"],
-  pokerai: ["legendary", "poker-ai"],
+  apishift: ["legendary", "apishift"],
+  "self-healing-agent": ["rare", "self-healing-agent"],
+  pokerai: ["rare", "poker-ai"],
   "claude-session-manager": ["rare", "claude-session-manager"],
   "pa-broadband-inequality": ["rare", "pa-broadband-inequality"],
 };

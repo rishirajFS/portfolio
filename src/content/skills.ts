@@ -9,7 +9,7 @@ export const skillGroups = define(
   [
     {
       name: "Languages",
-      skills: ["Python", "C++", "CUDA", "Java", "SQL", "TypeScript"],
+      skills: ["Python", "Go", "Java", "TypeScript", "C++", "SQL", "CUDA"],
     },
     {
       name: "LLM Systems & Serving",
@@ -22,6 +22,7 @@ export const skillGroups = define(
         "CUDA kernels",
         "KV-cache / RadixAttention",
         "LoRA / PEFT",
+        "GRPO",
       ],
     },
     {
@@ -64,7 +65,8 @@ export const skillGroups = define(
     {
       name: "Infrastructure",
       skills: [
-        "AWS",
+        "AWS (EKS, Lambda, RDS, Bedrock)",
+        "Terraform",
         "GCP",
         "Docker",
         "Kubernetes",

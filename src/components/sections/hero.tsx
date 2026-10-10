@@ -128,13 +128,13 @@ export function Hero({
     <section
       id="top"
       /**
-       * 800px rather than the prototype's 720 canvas. The real body copy runs
+       * 900px rather than the prototype's 720 canvas (800 before the quick-facts strip was added). The real body copy runs
        * four to five lines at 12px/1.9 where the placeholder ran two, which
        * pushes the hero block roughly 80px lower than the mock. 800 is the
        * floor at which the y112 hero, the bottom-132 HUD and the hotbar below
        * it all still clear each other. Taller viewports just get more dirt.
        */
-      className="relative isolate flex h-[100svh] min-h-[760px] max-h-[900px] justify-center overflow-hidden"
+      className="relative isolate flex h-[100svh] min-h-[900px] max-h-[960px] justify-center overflow-hidden"
     >
       <World />
 
@@ -168,7 +168,7 @@ export function Hero({
               three things the projects below are about (serving cost, agent
               pipelines, evaluation), which is what the item grid is showing. */}
           <p
-            className="font-display text-base leading-relaxed"
+            className="font-read text-base leading-relaxed"
             style={{
               maxWidth: 456,
               backgroundColor: "var(--plate-bg)",
@@ -205,6 +205,25 @@ export function Hero({
               Resume
             </PixelButtonLink>
           </div>
+
+          {site.highlights.length > 0 && (
+            <ul className="flex flex-wrap gap-1">
+              {site.highlights.map((fact) => (
+                <li
+                  key={fact}
+                  className="flex w-fit items-center gap-2 font-display text-xs leading-none text-plate-text"
+                  style={{
+                    backgroundColor: "var(--plate-bg)",
+                    border: "4px solid var(--plate-border)",
+                    padding: "4px 8px",
+                  }}
+                >
+                  <ItemChip color="var(--gold)" size={12} />
+                  {fact}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {/* ------------------------------------------------ projects panel */}

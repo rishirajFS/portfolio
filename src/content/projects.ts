@@ -74,7 +74,7 @@ const data = [
     ],
 
     caveats:
-      "ATTRIBUTION: PR #23781 was opened by teammate tejas-goyal; Rishi is credited as author #2 in the PR body, not as a commit author. Wording is deliberately 'co-authored', never 'submitted'. Only WLFU reached upstream, so Weighted Segmented LRU is NOT claimed. TTFT figures come from the PR body; the resume's 39.6%/26% differ from the PR's 37.7%/22.8%, so reconcile or supply the raw output. PR is currently mergeable=false with no human review. See VERIFICATION.md section 1.",
+      "ATTRIBUTION: PR #23781 was opened by teammate tejas-goyal; Rishi is credited as author #2 in the PR body, not as a commit author. Wording is deliberately 'co-authored', never 'submitted'. Only WLFU reached upstream, so Weighted Segmented LRU is NOT claimed. TTFT figures come from the PR body. The new resume STILL says 39.6% P99 / 26% mean on MS MARCO and 'weighting reuse by prefix depth', while the PR says 37.7%/22.8% on a Qwen2.5-7B shared-prefix workload with a scalar score. If the MS MARCO run is real, add it with its workload; otherwise align the resume. PR is currently mergeable=false with no human review. See VERIFICATION.md section 1.",
   },
 
   /* ------------------------------------------------------------------------ */
@@ -83,7 +83,7 @@ const data = [
     // already circulating in the resume and the repo is not linked. See
     // VERIFICATION.md section 2 before adding anything.
     slug: "personalized-sycophancy",
-    title: "Personalized sycophancy",
+    title: "SocialDrift",
     kind: "LLM evaluation · CMU Language Technologies Institute",
     tier: "featured",
     category: "research",
@@ -93,20 +93,96 @@ const data = [
     status: "in-review",
 
     description:
-      "Built a 100-scenario benchmark for how language models stop being honest as a conversation goes on. It probes the model's verdict at every turn, so drift is measured as a trajectory, and it isolates the turn where honesty gives way. First author, advised by Prof. Maarten Sap.",
+      "Built SocialDrift, a 100-case benchmark for how language models stop being honest as a conversation goes on. Across five-turn dialogues, \"you were right\" judgments rose from 1% to 24%, and an analysis of 36K judgments put 64% of the drift on conversation context. First author, advised by Prof. Maarten Sap.",
 
     note: "Measuring the drift is easy. Attributing it is not: probing mid-conversation risks altering the conversation you are measuring, and a five-turn effect could start at any of the five turns. Designing around both is what lets the benchmark point at the self-justification turn, where a user begins defending their own behaviour.",
 
     metrics: [
-      { value: "100", label: "Scenarios", emphasis: true },
-      { value: "In preparation", label: "First-author paper" },
+      {
+        value: "1% to 24%",
+        label: "\"You were right\" judgments over five turns",
+        emphasis: true,
+      },
+      { value: "64%", label: "Of drift from conversation context", emphasis: true },
+      { value: "36K", label: "Judgments analyzed" },
+      { value: "73%", label: "Agreement with crowd labels on 100 AITA posts" },
     ],
 
     stack: ["Python", "LLM evaluation", "Benchmark design", "Statistics"],
     links: [],
 
     caveats:
-      "HELD BACK ON PURPOSE. Unpublished paper, so this carries only what the resume says. The research repo is public but is NOT linked, and none of its statistics, model names or ablation design appear here. 'SOCIALDRIFT-100' appears nowhere in the repo so the name is avoided. The paper title and Prof. Sap as advisor still need his sign-off. See VERIFICATION.md section 2.",
+      "The resume now publishes the headline statistics (1% to 24%, 64%, 36K, 73%) and 'under review at EMNLP 2026', so they appear here. The 1% to 24% RIGHT% shift is confirmed in the llm-sycophancy README; 64%, 36K and 73% were not re-checked. The research repo is still NOT linked and its ablation and model names are still withheld. Prof. Sap's sign-off on being named is still worth getting. See VERIFICATION.md section 2.",
+  },
+
+  /* ------------------------------------------------------------------------ */
+  {
+    slug: "apishift",
+    title: "APIShift",
+    kind: "LLM agents · RL environment · Independent",
+    tier: "featured",
+    category: "agents",
+    start: "Jul 2026",
+    sortKey: "2026-07",
+    status: "shipped",
+
+    description:
+      "Built an evaluation benchmark and agent-orchestration pipeline that tests whether LLM agents recover from silent API changes by inspecting errors or live docs and adapting their tool calls, with success verified from final API state. GRPO fine-tuning improved seen changes but did not transfer to held-out ones.",
+
+    note: "The negative result is the finding. Across 3 seeds, GRPO raised Qwen3-4B seen-change success from 77% to 85%, yet held-out success was 38% against 40% before training. The model learned the training mutations, not the skill of adapting. A recovery prompt did more: it lifted held-out success from 40% to 52% with no training at all.",
+
+    metrics: [
+      { value: "77% to 85%", label: "Seen-change success after GRPO", emphasis: true },
+      { value: "38% vs. 40%", label: "Held-out, after vs. before (no transfer)", emphasis: true },
+      { value: "40% to 52%", label: "Held-out with a recovery prompt" },
+      { value: "3", label: "Seeds" },
+    ],
+
+    stack: ["GRPO", "LoRA", "vLLM", "Modal", "Qwen3", "Python"],
+
+    repo: "rishirajFS/apishift",
+    links: [
+      {
+        label: "Source",
+        href: "https://github.com/rishirajFS/apishift",
+        icon: "github",
+        external: true,
+      },
+    ],
+
+    caveats:
+      "The repo exists and the baselines table in its README is consistent with the setup, but the 77% to 85%, 38% vs. 40% and 40% to 52% figures come from the resume. They are not in the README, so link the results file or add them there.",
+  },
+
+  /* ------------------------------------------------------------------------ */
+  {
+    slug: "chart-validator",
+    title: "Validator for LLM-generated charts",
+    kind: "LLM agents · CMU AI Agents",
+    tier: "featured",
+    category: "agents",
+    start: "Sep 2026",
+    end: "Sep 2026",
+    sortKey: "2026-09",
+    status: "shipped",
+
+    description:
+      "Built automated evals that replay a chart agent's commands in a sandbox and inspect the instrumented Matplotlib output for execution, data, design and readability errors, checking axes, labels, plotted values, text overlap and clipping. It beat a vision-language judge baseline by a wide margin.",
+
+    metrics: [
+      {
+        value: "0.03 to 0.67",
+        label: "Macro-MCC vs. a vision-language judge baseline",
+        emphasis: true,
+      },
+      { value: "110", label: "Labeled runs" },
+    ],
+
+    stack: ["Python", "Matplotlib", "Modal", "pytest"],
+    links: [],
+
+    caveats:
+      "From the resume only. No public repo is linked, so none of the figures can be checked. Link a repo or write-up if the course allows it.",
   },
 
   /* ------------------------------------------------------------------------ */
@@ -114,7 +190,7 @@ const data = [
     slug: "self-healing-agent",
     title: "Self-healing agent",
     kind: "Agents · Independent",
-    tier: "featured",
+    tier: "secondary",
     category: "agents",
     start: "Dec 2025",
     sortKey: "2025-12",
@@ -160,7 +236,7 @@ const data = [
     slug: "poker-ai",
     title: "Heads-up poker AI",
     kind: "Applied ML · CMU AI Poker Tournament",
-    tier: "featured",
+    tier: "secondary",
     category: "applied-ml",
     start: "Mar 2026",
     end: "Mar 2026",
@@ -210,7 +286,7 @@ const data = [
     slug: "harbor",
     title: "HARBOR",
     kind: "Applied ML · Carnegie Mellon",
-    tier: "secondary",
+    tier: "minor",
     category: "applied-ml",
     start: "Jan 2026",
     end: "Present",

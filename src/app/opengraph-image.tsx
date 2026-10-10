@@ -148,7 +148,7 @@ export default function OpengraphImage() {
           }}
         >
           <span style={{ fontSize: 17, lineHeight: 1.65, color: "#e8e8e8" }}>
-            ML systems engineer at CMU. Cache eviction, agent pipelines, and
+            Machine learning engineer at CMU. Cache eviction, LLM agents, and
             evaluation honest enough to say no.
           </span>
         </div>

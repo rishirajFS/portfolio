@@ -11,12 +11,12 @@ export const education = define(
       sortKey: "2026-12",
       expected: true,
       coursework: [
-        "Deep Learning",
-        "Large Language Models and their Applications",
         "Large Language Model Systems",
-        "Cloud Computing",
-        "Machine Learning",
-        "Foundations of Computational Data Science",
+        "Introduction to Machine Learning",
+        "LLMs and Their Applications",
+        "AI Agents",
+        "Introduction to Deep Learning",
+        "Deep Reinforcement Learning and Control",
       ],
     },
     {

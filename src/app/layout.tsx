@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   authors: [{ name: site.name, url: site.siteUrl }],
   creator: site.name,
   keywords: [
-    "ML systems engineer",
+    "machine learning engineer",
     "LLM inference",
     "KV cache",
     "SGLang",
